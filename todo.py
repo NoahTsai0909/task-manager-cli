@@ -3,6 +3,7 @@ import os
 
 DATA_FILE = "tasks.json"
 
+
 def load_tasks():
     if not os.path.exists(DATA_FILE):
         return []
@@ -13,14 +14,17 @@ def load_tasks():
         print("⚠️ Warning: Corrupted task file. Starting fresh.")
         return []
 
+
 def save_tasks(tasks):
     with open(DATA_FILE, "w") as f:
         json.dump(tasks, f, indent=2)
+
 
 def add_task(task, due_date=None):
     tasks = load_tasks()
     tasks.append({"task": task, "done": False, "due": due_date})
     save_tasks(tasks)
+
 
 def delete_task(index):
     tasks = load_tasks()
@@ -28,15 +32,18 @@ def delete_task(index):
         del tasks[index]
         save_tasks(tasks)
 
+
 def edit_task(index, new_text):
     tasks = load_tasks()
     if 0 <= index < len(tasks):
         tasks[index]["task"] = new_text
         save_tasks(tasks)
 
+
 def search_tasks(keyword):
     tasks = load_tasks()
     return [t for t in tasks if keyword.lower() in t["task"].lower()]
+
 
 def list_tasks():
     tasks = load_tasks()
@@ -44,25 +51,31 @@ def list_tasks():
         status = "Y" if t["done"] else "N"
         print(f"{i+1}. [{status}] {t['task']}")
 
+
 def list_completed():
     return [t for t in load_tasks() if t["done"]]
 
+
 def list_incomplete():
     return [t for t in load_tasks() if not t["done"]]
+
 
 def export_tasks(filename="export.json"):
     tasks = load_tasks()
     with open(filename, "w") as f:
         json.dump(tasks, f, indent=2)
 
+
 def clear_tasks():
     save_tasks([])
+
 
 def complete_task(index):
     tasks = load_tasks()
     if 0 <= index < len(tasks):
         tasks[index]["done"] = True
         save_tasks(tasks)
+
 
 # CLI example
 if __name__ == "__main__":
